@@ -1,5 +1,7 @@
 package com.Tekup.ApiRestaurantItalien.Services;
 
+import com.Tekup.ApiRestaurantItalien.DTO.MetRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.MetResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
 import com.Tekup.ApiRestaurantItalien.Models.Met;
 
@@ -13,8 +15,8 @@ public interface MetService {
 
     List<Met> getAllMets();
     Met getMetByName(String nom);
-    Met createMet(Met met);
-    Met modifyMet(String nom,Met newMet);
-    Met deleteMetByName(String nom);
+    MetResponse createMet(MetRequest met);
+    MetResponse modifyMet(String nom,MetRequest newMet);
+    MetResponse deleteMetByName(String nom);
 }
 

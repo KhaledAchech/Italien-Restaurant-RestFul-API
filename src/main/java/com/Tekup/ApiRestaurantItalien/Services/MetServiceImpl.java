@@ -1,8 +1,12 @@
 package com.Tekup.ApiRestaurantItalien.Services;
 
+import com.Tekup.ApiRestaurantItalien.DTO.ClientResponse;
+import com.Tekup.ApiRestaurantItalien.DTO.MetRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.MetResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
 import com.Tekup.ApiRestaurantItalien.Models.Met;
 import com.Tekup.ApiRestaurantItalien.Repositories.MetRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,7 @@ import java.util.Optional;
 public class MetServiceImpl implements MetService {
 
     private MetRepository metRepo;
+    private ModelMapper mapper = new ModelMapper();
 
     @Autowired
     public MetServiceImpl(MetRepository metRepo) {
@@ -46,29 +51,34 @@ public class MetServiceImpl implements MetService {
     }
 
     @Override
-    public Met createMet(Met met) {
-        return metRepo.save(met);
+    public MetResponse createMet(MetRequest met)
+    {
+        Met metRequest = mapper.map(met, Met.class);
+        metRepo.save(metRequest);
+        return mapper.map(metRequest, MetResponse.class);
     }
 
     @Override
-    public Met modifyMet(String nom, Met newMet) {
+    public MetResponse modifyMet(String nom, MetRequest newMet)
+    {
+        Met metRequest = mapper.map(newMet, Met.class);
         Met thisMet = this.getMetByName(nom);
-        if (newMet.getNom()!=null)
+        if (metRequest.getNom()!=null)
         {
-            thisMet.setNom(newMet.getNom());
+            thisMet.setNom(metRequest.getNom());
         }
-        if (newMet.getPrix()>0)
+        if (metRequest.getPrix()>0)
         {
-            thisMet.setPrix(newMet.getPrix());
+            thisMet.setPrix(metRequest.getPrix());
         }
-
-        return metRepo.save(thisMet);
+        metRepo.save(thisMet);
+        return mapper.map(thisMet, MetResponse.class);
     }
 
     @Override
-    public Met deleteMetByName(String nom) {
+    public MetResponse deleteMetByName(String nom) {
         Met met = this.getMetByName(nom);
         metRepo.deleteById(nom);
-        return met;
+        return mapper.map(met, MetResponse.class);
     }
 }

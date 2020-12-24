@@ -1,5 +1,7 @@
 package com.Tekup.ApiRestaurantItalien.Endpoints;
 
+import com.Tekup.ApiRestaurantItalien.DTO.ClientRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.ClientResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
 import com.Tekup.ApiRestaurantItalien.Models.Ticket;
 import com.Tekup.ApiRestaurantItalien.Services.ClientService;
@@ -43,7 +45,7 @@ public class ClientRest {
     }
 
     @PostMapping
-    public Client createClient(@RequestBody Client client)
+    public ClientResponse createClient(@RequestBody ClientRequest client)
     {
         return clientService.createClient(client);
     }
@@ -55,12 +57,12 @@ public class ClientRest {
     }
 
     @PutMapping("/{id}")
-    public Client modifyClient(@PathVariable("id") long id, @RequestBody Client newClient) {
+    public ClientResponse modifyClient(@PathVariable("id") long id, @RequestBody ClientRequest newClient) {
         return clientService.modifyClient(id, newClient);
     }
 
     @DeleteMapping("/{id}")
-    public Client deleteById(@PathVariable("id") long id) {
+    public ClientResponse deleteById(@PathVariable("id") long id) {
         return clientService.deleteClientById(id);
     }
 
@@ -68,6 +70,12 @@ public class ClientRest {
     public Client addTicketToClient(@PathVariable long id, @RequestBody Ticket ticket)
     {
         return clientService.addTicket(id,ticket);
+    }
+
+    @GetMapping("/FullInfo/{id}")
+    public ClientResponse getClientInfoById(@PathVariable long id)
+    {
+        return clientService.getClientInfosById(id);
     }
 
 }

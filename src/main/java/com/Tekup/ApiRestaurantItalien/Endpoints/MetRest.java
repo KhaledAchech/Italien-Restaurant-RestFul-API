@@ -1,5 +1,7 @@
 package com.Tekup.ApiRestaurantItalien.Endpoints;
 
+import com.Tekup.ApiRestaurantItalien.DTO.MetRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.MetResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Met;
 import com.Tekup.ApiRestaurantItalien.Services.MetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +41,19 @@ public class MetRest {
     }
 
     @PostMapping
-    public Met createMet(@RequestBody Met met)
+    public MetResponse createMet(@RequestBody MetRequest met)
     {
         return metService.createMet(met);
     }
 
     @PutMapping("/{nom}")
-    public Met modifyMet(@PathVariable String nom, @RequestBody Met newMet)
+    public MetResponse modifyMet(@PathVariable String nom, @RequestBody MetRequest newMet)
     {
         return metService.modifyMet(nom,newMet);
     }
 
     @DeleteMapping("/{nom}")
-    public Met deleteMet(@PathVariable String nom)
+    public MetResponse deleteMet(@PathVariable String nom)
     {
         return metService.deleteMetByName(nom);
     }

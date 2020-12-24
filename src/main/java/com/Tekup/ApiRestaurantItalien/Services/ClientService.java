@@ -1,5 +1,7 @@
 package com.Tekup.ApiRestaurantItalien.Services;
 
+import com.Tekup.ApiRestaurantItalien.DTO.ClientRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.ClientResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
 import com.Tekup.ApiRestaurantItalien.Models.Met;
 import com.Tekup.ApiRestaurantItalien.Models.Ticket;
@@ -13,8 +15,10 @@ public interface ClientService {
 
     List<Client> getAllClients();
     Client getClientById(long id);
-    Client createClient(Client client);
-    Client modifyClient(long id,Client newclient);
-    Client deleteClientById(long id);
+    ClientResponse createClient(ClientRequest client);
+    ClientResponse modifyClient(long id,ClientRequest newclient);
+    ClientResponse deleteClientById(long id);
     Client addTicket(long id, Ticket ticket);
+
+    ClientResponse getClientInfosById(long id);
 }

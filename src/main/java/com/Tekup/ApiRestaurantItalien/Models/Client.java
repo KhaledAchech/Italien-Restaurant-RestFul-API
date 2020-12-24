@@ -32,4 +32,18 @@ public class Client {
     @OneToMany(mappedBy = "client",cascade = CascadeType.REMOVE)
     private Set<Ticket> tickets = new HashSet<>();
 
+    public String getNomComplet()
+    {
+        return prenom + " " + nom;
+    }
+
+    public String getArgentDepense()
+    {
+        float additions = 0;
+        for (Ticket ticket:tickets) {
+            additions += ticket.getAddition();
+        }
+        return this.getNomComplet() + " Money spent : " + additions;
+    }
+
 }

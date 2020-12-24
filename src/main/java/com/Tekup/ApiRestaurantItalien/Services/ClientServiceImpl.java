@@ -1,10 +1,14 @@
 package com.Tekup.ApiRestaurantItalien.Services;
 
+import com.Tekup.ApiRestaurantItalien.DTO.ClientRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.ClientResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
 import com.Tekup.ApiRestaurantItalien.Models.Met;
 import com.Tekup.ApiRestaurantItalien.Models.Ticket;
 import com.Tekup.ApiRestaurantItalien.Repositories.ClientRepoistory;
 import com.Tekup.ApiRestaurantItalien.Repositories.TicketRepository;
+import org.apache.catalina.mapper.Mapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +24,7 @@ public class ClientServiceImpl implements ClientService {
 
     private ClientRepoistory clientRepo;
     private TicketRepository ticketRepo;
+    private ModelMapper mapper = new ModelMapper();
 
     @Autowired
     public ClientServiceImpl(ClientRepoistory clientRepo,TicketRepository ticketRepo) {
@@ -49,41 +54,46 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client createClient(Client client) {
-        return clientRepo.save(client);
+    public ClientResponse createClient(ClientRequest client)
+    {
+        Client clientRequest = mapper.map(client, Client.class);
+        clientRepo.save(clientRequest);
+        return mapper.map(clientRequest, ClientResponse.class);
     }
 
     @Override
-    public Client modifyClient(long id, Client newclient) {
+    public ClientResponse modifyClient(long id, ClientRequest newclient) {
+        Client clientRequest = mapper.map(newclient, Client.class);
         Client thisclient = this.getClientById(id);
-        if (newclient.getNom()!=null)
+        if (clientRequest.getNom()!=null)
         {
-            thisclient.setNom(newclient.getNom());
+            thisclient.setNom(clientRequest.getNom());
         }
-        if (newclient.getPrenom()!=null)
+        if (clientRequest.getPrenom()!=null)
         {
-            thisclient.setPrenom(newclient.getPrenom());
+            thisclient.setPrenom(clientRequest.getPrenom());
         }
-        if (newclient.getDateDeNaissance()!=null)
+        if (clientRequest.getDateDeNaissance()!=null)
         {
-            thisclient.setDateDeNaissance(newclient.getDateDeNaissance());
+            thisclient.setDateDeNaissance(clientRequest.getDateDeNaissance());
         }
-        if (newclient.getCourriel()!=null)
+        if (clientRequest.getCourriel()!=null)
         {
-            thisclient.setCourriel(newclient.getCourriel());
+            thisclient.setCourriel(clientRequest.getCourriel());
         }
-        if (newclient.getTelephone()!=null)
+        if (clientRequest.getTelephone()!=null)
         {
-            thisclient.setTelephone(newclient.getTelephone());
+            thisclient.setTelephone(clientRequest.getTelephone());
         }
-        return clientRepo.save(thisclient);
+        clientRepo.save(thisclient);
+        return mapper.map(thisclient, ClientResponse.class);
     }
 
     @Override
-    public Client deleteClientById(long id) {
+    public ClientResponse deleteClientById(long id) {
         Client client = this.getClientById(id);
         clientRepo.deleteById(id);
-        return client;
+        return mapper.map(client, ClientResponse.class);
     }
 
     @Override
@@ -100,5 +110,19 @@ public class ClientServiceImpl implements ClientService {
         return clientRepo.save(client);
     }
 
+    @Override
+    public ClientResponse getClientInfosById(long id) {
+        Optional<Client> opt = clientRepo.findById(id);
+        Client client;
+        if (opt.isPresent())
+        {
+            client = opt.get();
+        }
+        else
+        {
+            throw new NoSuchElementException("il n'y a pas de client avec l'identifiant saisi");
+        }
+        return mapper.map(client,ClientResponse.class);
+    }
 
 }
