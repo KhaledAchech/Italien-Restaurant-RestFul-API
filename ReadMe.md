@@ -1,4 +1,5 @@
-#Italien Restaurant API
+#Italien Restaurant API#
+
 This is a University Project made with spring boot and H2 memory DataBase (most likely will be migrated to a Mysql DataBase when finished).
 This API offers : 
 	-It offers CRUD Operations for every entity.
