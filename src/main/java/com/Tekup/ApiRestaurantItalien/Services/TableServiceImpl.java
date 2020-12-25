@@ -1,10 +1,14 @@
 package com.Tekup.ApiRestaurantItalien.Services;
 
+import com.Tekup.ApiRestaurantItalien.DTO.ClientResponse;
+import com.Tekup.ApiRestaurantItalien.DTO.TableRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.TableResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
 import com.Tekup.ApiRestaurantItalien.Models.Table;
 import com.Tekup.ApiRestaurantItalien.Models.Ticket;
 import com.Tekup.ApiRestaurantItalien.Repositories.TableRepository;
 import com.Tekup.ApiRestaurantItalien.Repositories.TicketRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +25,7 @@ public class TableServiceImpl implements TableService{
 
     private TableRepository tableRepository;
     private TicketRepository ticketRepo;
+    private ModelMapper mapper = new ModelMapper();
 
     @Autowired
     public TableServiceImpl(TableRepository tableRepository,TicketRepository ticketRepo) {
@@ -50,33 +55,39 @@ public class TableServiceImpl implements TableService{
     }
 
     @Override
-    public Table createTable(Table table) {
-        return tableRepository.save(table);
+    public TableResponse createTable(TableRequest table)
+    {
+        Table tableRequest = mapper.map(table, Table.class);
+        tableRepository.save(tableRequest);
+        return mapper.map(tableRequest, TableResponse.class);
     }
 
     @Override
-    public Table modifyTable(int numero, Table newTable) {
+    public TableResponse modifyTable(int numero, TableRequest newTable)
+    {
+        Table tableRequest = mapper.map(newTable, Table.class);
         Table thisTable = this.getTableById(numero);
-        if (newTable.getNbCouvert()!=0)
+        if (tableRequest.getNbCouvert()!=0)
         {
-            thisTable.setNbCouvert(newTable.getNbCouvert());
+            thisTable.setNbCouvert(tableRequest.getNbCouvert());
         }
-        if (newTable.getSupplement()>=0)
+        if (tableRequest.getSupplement()>=0)
         {
-            thisTable.setSupplement(newTable.getSupplement());
+            thisTable.setSupplement(tableRequest.getSupplement());
         }
-        if (newTable.getType()!= null)
+        if (tableRequest.getType()!= null)
         {
-            thisTable.setType(newTable.getType());
+            thisTable.setType(tableRequest.getType());
         }
-        return tableRepository.save(thisTable);
+        tableRepository.save(thisTable);
+        return mapper.map(thisTable, TableResponse.class);
     }
 
     @Override
-    public Table deleteTableById(int numero) {
+    public TableResponse deleteTableById(int numero) {
         Table table = this.getTableById(numero);
         tableRepository.deleteById(numero);
-        return table;
+        return mapper.map(table, TableResponse.class);
     }
 
     @Override

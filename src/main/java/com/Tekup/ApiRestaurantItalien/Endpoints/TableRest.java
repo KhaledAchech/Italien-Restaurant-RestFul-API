@@ -1,5 +1,7 @@
 package com.Tekup.ApiRestaurantItalien.Endpoints;
 
+import com.Tekup.ApiRestaurantItalien.DTO.TableRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.TableResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
 import com.Tekup.ApiRestaurantItalien.Models.Table;
 import com.Tekup.ApiRestaurantItalien.Models.Ticket;
@@ -41,19 +43,19 @@ public class TableRest {
     }
 
     @PostMapping
-    public Table creatTable(@RequestBody Table table)
+    public TableResponse creatTable(@RequestBody TableRequest table)
     {
         return tableService.createTable(table);
     }
 
     @PutMapping("/{numero}")
-    public Table modifyTable(@PathVariable int numero, @RequestBody Table newTable)
+    public TableResponse modifyTable(@PathVariable int numero, @RequestBody TableRequest newTable)
     {
         return tableService.modifyTable(numero,newTable);
     }
 
     @DeleteMapping("/{numero}")
-    public Table deleteTable(@PathVariable int numero)
+    public TableResponse deleteTable(@PathVariable int numero)
     {
         return tableService.deleteTableById(numero);
     }

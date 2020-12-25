@@ -1,5 +1,7 @@
 package com.Tekup.ApiRestaurantItalien.Services;
 
+import com.Tekup.ApiRestaurantItalien.DTO.TableRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.TableResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Table;
 import com.Tekup.ApiRestaurantItalien.Models.Ticket;
 
@@ -13,9 +15,9 @@ public interface TableService {
 
     List<Table> getAllTables();
     Table getTableById(int numero);
-    Table createTable(Table table);
-    Table modifyTable(int numero,Table newTable);
-    Table deleteTableById(int numero);
+    TableResponse createTable(TableRequest table);
+    TableResponse modifyTable(int numero,TableRequest newTable);
+    TableResponse deleteTableById(int numero);
 
     Table addTicket(int numero, Ticket ticket);
 }

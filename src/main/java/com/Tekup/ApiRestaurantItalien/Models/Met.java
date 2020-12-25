@@ -19,7 +19,6 @@ import java.util.Set;
 public class Met {
 
     @Id
-    @Column(unique = true)
     private String nom;
     private float prix;
 

@@ -1,5 +1,7 @@
 package com.Tekup.ApiRestaurantItalien.Services;
 
+import com.Tekup.ApiRestaurantItalien.DTO.TicketRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.TicketResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
 import com.Tekup.ApiRestaurantItalien.Models.Met;
 import com.Tekup.ApiRestaurantItalien.Models.Table;
@@ -7,6 +9,7 @@ import com.Tekup.ApiRestaurantItalien.Models.Ticket;
 import com.Tekup.ApiRestaurantItalien.Repositories.MetRepository;
 import com.Tekup.ApiRestaurantItalien.Repositories.TableRepository;
 import com.Tekup.ApiRestaurantItalien.Repositories.TicketRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,7 @@ public class TicketServiceImpl implements TicketService {
 
     private TicketRepository ticketRepo;
     private MetRepository metRepo;
+    private ModelMapper mapper = new ModelMapper();
 
     @Autowired
     public TicketServiceImpl(TicketRepository ticketRepo, MetRepository metRepo) {
@@ -51,33 +55,38 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket createTicket(Ticket ticket) {
-        return ticketRepo.save(ticket);
+    public TicketResponse createTicket(TicketRequest ticket)
+    {
+        Ticket ticketRequest = mapper.map(ticket, Ticket.class);
+        ticketRepo.save(ticketRequest);
+        return mapper.map(ticketRequest, TicketResponse.class);
     }
 
     @Override
-    public Ticket modifyTicket(int numero, Ticket newTicket) {
+    public TicketResponse modifyTicket(int numero, TicketRequest newTicket) {
+        Ticket ticketRequest = mapper.map(newTicket, Ticket.class);
         Ticket thisTicket = this.getTicketById(numero);
-        if (newTicket.getDate()!=null)
+        if (ticketRequest.getDate()!=null)
         {
-            thisTicket.setDate(newTicket.getDate());
+            thisTicket.setDate(ticketRequest.getDate());
         }
-        if (newTicket.getNbCouvert()!=0)
+        if (ticketRequest.getNbCouvert()!=0)
         {
-            thisTicket.setNbCouvert(newTicket.getNbCouvert());
+            thisTicket.setNbCouvert(ticketRequest.getNbCouvert());
         }
-        if (!(newTicket.getAddition()<0))
+        if (!(ticketRequest.getAddition()<0))
         {
-            thisTicket.setAddition(newTicket.getAddition());
+            thisTicket.setAddition(ticketRequest.getAddition());
         }
-        return ticketRepo.save(thisTicket);
+        ticketRepo.save(thisTicket);
+        return mapper.map(thisTicket, TicketResponse.class);
     }
 
     @Override
-    public Ticket deleteTicketById(int numero) {
+    public TicketResponse deleteTicketById(int numero) {
         Ticket ticket = this.getTicketById(numero);
         ticketRepo.deleteById(numero);
-        return ticket;
+        return mapper.map(ticket,TicketResponse.class);
     }
 
     @Override

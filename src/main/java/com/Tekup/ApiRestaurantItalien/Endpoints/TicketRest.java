@@ -1,5 +1,7 @@
 package com.Tekup.ApiRestaurantItalien.Endpoints;
 
+import com.Tekup.ApiRestaurantItalien.DTO.TicketRequest;
+import com.Tekup.ApiRestaurantItalien.DTO.TicketResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
 import com.Tekup.ApiRestaurantItalien.Models.Met;
 import com.Tekup.ApiRestaurantItalien.Models.Ticket;
@@ -41,19 +43,19 @@ public class TicketRest {
     }
 
     @PostMapping
-    public Ticket createTicket(@RequestBody Ticket ticket)
+    public TicketResponse createTicket(@RequestBody TicketRequest ticket)
     {
         return ticketService.createTicket(ticket);
     }
 
     @PutMapping("/{numero}")
-    public Ticket modifyTicket(@PathVariable("numero") int numero, @RequestBody Ticket newTicket)
+    public TicketResponse modifyTicket(@PathVariable("numero") int numero, @RequestBody TicketRequest newTicket)
     {
         return ticketService.modifyTicket(numero,newTicket);
     }
 
     @DeleteMapping("/{numero}")
-    public Ticket deleteTicketById(@PathVariable("numero") int numero)
+    public TicketResponse deleteTicketById(@PathVariable("numero") int numero)
     {
         return ticketService.deleteTicketById(numero);
     }
