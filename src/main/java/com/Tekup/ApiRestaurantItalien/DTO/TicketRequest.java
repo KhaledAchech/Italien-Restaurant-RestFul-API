@@ -25,6 +25,5 @@ public class TicketRequest {
     @Positive(message = "This field should be positive")
     private int nbCouvert;
     @Positive(message = "This field should be positive")
-    @NotBlank(message = "This field should not be empty")
     private float addition;
 }

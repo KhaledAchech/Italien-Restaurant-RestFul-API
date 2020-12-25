@@ -22,6 +22,5 @@ public class MetRequest {
     @Pattern(regexp = "[a-zA-Z ]+", message =  "Name must contain only characters")
     private String nom;
     @Positive(message = "This field should be positive")
-    @NotBlank(message = "This field should not be empty")
     private float prix;
 }
