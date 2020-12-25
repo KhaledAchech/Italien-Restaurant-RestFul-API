@@ -9,8 +9,11 @@ import com.Tekup.ApiRestaurantItalien.Services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 /************************************
@@ -45,7 +48,7 @@ public class ClientRest {
     }
 
     @PostMapping
-    public ClientResponse createClient(@RequestBody ClientRequest client)
+    public ClientResponse createClient(@RequestBody@Valid ClientRequest client)
     {
         return clientService.createClient(client);
     }
@@ -57,7 +60,7 @@ public class ClientRest {
     }
 
     @PutMapping("/{id}")
-    public ClientResponse modifyClient(@PathVariable("id") long id, @RequestBody ClientRequest newClient) {
+    public ClientResponse modifyClient(@PathVariable("id") long id, @RequestBody@Valid ClientRequest newClient) {
         return clientService.modifyClient(id, newClient);
     }
 
@@ -67,7 +70,7 @@ public class ClientRest {
     }
 
     @PostMapping("/addTicket/{id}")
-    public Client addTicketToClient(@PathVariable long id, @RequestBody Ticket ticket)
+    public Client addTicketToClient(@PathVariable long id, @RequestBody@Valid Ticket ticket)
     {
         return clientService.addTicket(id,ticket);
     }
@@ -76,6 +79,15 @@ public class ClientRest {
     public ClientResponse getClientInfoById(@PathVariable long id)
     {
         return clientService.getClientInfosById(id);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        StringBuilder errors = new StringBuilder();
+        for (FieldError error : e.getBindingResult().getFieldErrors()) {
+            errors.append(error.getField() + ": "+ error.getDefaultMessage()+".\n");
+        }
+        return new ResponseEntity<String>(errors.toString(), HttpStatus.BAD_REQUEST);
     }
 
 }

@@ -9,8 +9,11 @@ import com.Tekup.ApiRestaurantItalien.Services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -43,13 +46,13 @@ public class TicketRest {
     }
 
     @PostMapping
-    public TicketResponse createTicket(@RequestBody TicketRequest ticket)
+    public TicketResponse createTicket(@RequestBody@Valid TicketRequest ticket)
     {
         return ticketService.createTicket(ticket);
     }
 
     @PutMapping("/{numero}")
-    public TicketResponse modifyTicket(@PathVariable("numero") int numero, @RequestBody TicketRequest newTicket)
+    public TicketResponse modifyTicket(@PathVariable("numero") int numero, @RequestBody@Valid TicketRequest newTicket)
     {
         return ticketService.modifyTicket(numero,newTicket);
     }
@@ -66,9 +69,17 @@ public class TicketRest {
     }
 
     @PostMapping("/addMeal/{numero}")
-    public Ticket addMeal(@PathVariable int numero, @RequestBody Met met)
+    public Ticket addMeal(@PathVariable int numero, @RequestBody@Valid Met met)
     {
         return ticketService.addMeal(numero,met);
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        StringBuilder errors = new StringBuilder();
+        for (FieldError error : e.getBindingResult().getFieldErrors()) {
+            errors.append(error.getField() + ": "+ error.getDefaultMessage()+".\n");
+        }
+        return new ResponseEntity<String>(errors.toString(), HttpStatus.BAD_REQUEST);
+    }
 }
