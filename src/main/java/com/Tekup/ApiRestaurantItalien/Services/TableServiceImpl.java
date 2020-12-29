@@ -106,5 +106,22 @@ public class TableServiceImpl implements TableService{
         return tableRepository.save(table);
     }
 
+    @Override
+    public TableResponse getMostReservedTable()
+    {
+        List<Table> tables = tableRepository.findAll();
+        Table saveTable = null;
+        int max = 0;
+        for (Table table : tables)
+        {
+            if (table.getTickets().size() > max)
+            {
+                max = table.getTickets().size();
+                saveTable = table;
+            }
+        }
+        return mapper.map(saveTable,TableResponse.class);
+    }
+
 
 }

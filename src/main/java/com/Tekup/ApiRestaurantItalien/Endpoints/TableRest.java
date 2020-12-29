@@ -83,4 +83,10 @@ public class TableRest {
         }
         return new ResponseEntity<String>(errors.toString(), HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/mostReservedTable")
+    public TableResponse getMostReservedTable()
+    {
+        return tableService.getMostReservedTable();
+    }
 }

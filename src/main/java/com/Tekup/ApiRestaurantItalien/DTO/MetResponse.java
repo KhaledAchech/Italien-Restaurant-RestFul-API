@@ -15,4 +15,5 @@ public class MetResponse {
 
     private String nom;
     private float prix;
+    private String type;
 }

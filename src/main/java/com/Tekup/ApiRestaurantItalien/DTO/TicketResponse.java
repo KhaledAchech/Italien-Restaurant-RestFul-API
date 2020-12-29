@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 /************************************
  ********* author : Khaled ***********
@@ -13,7 +14,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TicketResponse {
-    private LocalTime date;
+    private LocalDateTime date;
     private int nbCouvert;
     private float addition;
 }

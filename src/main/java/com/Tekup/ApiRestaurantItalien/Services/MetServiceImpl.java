@@ -63,13 +63,13 @@ public class MetServiceImpl implements MetService {
     {
         Met metRequest = mapper.map(newMet, Met.class);
         Met thisMet = this.getMetByName(nom);
-        if (metRequest.getNom()!=null)
-        {
-            thisMet.setNom(metRequest.getNom());
-        }
         if (metRequest.getPrix()>0)
         {
             thisMet.setPrix(metRequest.getPrix());
+        }
+        if (metRequest.getType()!=null)
+        {
+            thisMet.setType(metRequest.getType());
         }
         metRepo.save(thisMet);
         return mapper.map(thisMet, MetResponse.class);

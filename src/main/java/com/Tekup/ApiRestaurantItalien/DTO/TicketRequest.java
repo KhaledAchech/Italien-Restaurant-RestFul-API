@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /************************************
@@ -21,9 +23,9 @@ import java.time.LocalTime;
 @NoArgsConstructor
 public class TicketRequest {
     @FutureOrPresent(message = "Date should be present or in the near future")
-    private LocalTime date;
+    private LocalDateTime date;
     @Positive(message = "This field should be positive")
     private int nbCouvert;
-    @Positive(message = "This field should be positive")
+    @PositiveOrZero(message = "This field should be positive")
     private float addition;
 }

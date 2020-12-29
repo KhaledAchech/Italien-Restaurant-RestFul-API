@@ -1,5 +1,6 @@
 package com.Tekup.ApiRestaurantItalien.Endpoints;
 
+import com.Tekup.ApiRestaurantItalien.DTO.MetResponse;
 import com.Tekup.ApiRestaurantItalien.DTO.TicketRequest;
 import com.Tekup.ApiRestaurantItalien.DTO.TicketResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
@@ -14,8 +15,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.*;
 
 /************************************
  ********* author : Khaled ***********
@@ -81,5 +83,36 @@ public class TicketRest {
             errors.append(error.getField() + ": "+ error.getDefaultMessage()+".\n");
         }
         return new ResponseEntity<String>(errors.toString(), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/Plats/{date}")
+    public MetResponse mostBoughtPLate(@PathVariable String date)
+    {
+        LocalDateTime buyingDate = LocalDateTime.parse(date);
+        return ticketService.getMostBoughtPlateByDate(buyingDate);
+    }
+    @GetMapping("/getRevenuePerDay")
+    public List<String> getRevenuePerDay()
+    {
+        return ticketService.getRevenuePerDay();
+    }
+
+    @GetMapping("/getRevenuePerMonth")
+    public List<String> getRevenuePerMonth()
+    {
+        return ticketService.getRevenuePerMonth();
+    }
+
+    @GetMapping("/getRevenuePerWeek")
+    public List<String> getRevenuePerWeek()
+    {
+        return ticketService.getRevenuePerWeek();
+    }
+
+    @GetMapping("/getRevenueAtGivenDate/{date}")
+    public List<String> getRevenueAtGivenDate(@PathVariable String date)
+    {
+        LocalDateTime searchDate = LocalDateTime.parse(date);
+        return ticketService.getRevenueAtGivenDate(searchDate);
     }
 }

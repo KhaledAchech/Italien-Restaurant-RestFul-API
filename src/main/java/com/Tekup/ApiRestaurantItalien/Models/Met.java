@@ -21,6 +21,8 @@ public class Met {
     @Id
     private String nom;
     private float prix;
+    @Column(nullable = false)
+    private String type = "met";
 
     @JsonIgnore
     @ManyToMany(mappedBy = "mets")

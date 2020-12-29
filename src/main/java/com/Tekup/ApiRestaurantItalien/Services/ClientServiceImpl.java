@@ -3,18 +3,19 @@ package com.Tekup.ApiRestaurantItalien.Services;
 import com.Tekup.ApiRestaurantItalien.DTO.ClientRequest;
 import com.Tekup.ApiRestaurantItalien.DTO.ClientResponse;
 import com.Tekup.ApiRestaurantItalien.Models.Client;
-import com.Tekup.ApiRestaurantItalien.Models.Met;
 import com.Tekup.ApiRestaurantItalien.Models.Ticket;
 import com.Tekup.ApiRestaurantItalien.Repositories.ClientRepoistory;
 import com.Tekup.ApiRestaurantItalien.Repositories.TicketRepository;
-import org.apache.catalina.mapper.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 /************************************
  ********* author : Khaled ***********
  *** last update : december 22, 2020**
@@ -99,6 +100,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client addTicket(long id, Ticket ticket) {
         //adding the ticket to the client
+        ticket.setDate(LocalDateTime.of(LocalDateTime.now().getYear(),LocalDateTime.now().getMonth(),
+        LocalDateTime.now().getDayOfMonth(), LocalDateTime.now().getHour(), LocalDateTime.now().getMinute()));
         Client client = this.getClientById(id);
         client.getTickets().add(ticket);
 
@@ -123,6 +126,35 @@ public class ClientServiceImpl implements ClientService {
             throw new NoSuchElementException("il n'y a pas de client avec l'identifiant saisi");
         }
         return mapper.map(client,ClientResponse.class);
+    }
+
+    @Override
+    public ClientResponse getMostLoyalClient() {
+        List<Client> clients = clientRepo.findAll();
+        Client saveClient = null;
+        int max = 0;
+        for (Client client:clients)
+        {
+            if (client.getTickets().size() > max)
+            {
+                max = client.getTickets().size();
+                saveClient = client;
+            }
+        }
+        return mapper.map(saveClient,ClientResponse.class);
+    }
+
+    @Override
+    public String getMostReservedDayByClient(Client client) {
+        List<String> days = clientRepo.GetMostReservedDaysByClient(client);
+        String MostReservedDay =
+                days.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream().max((o1, o2) -> o1.getValue().compareTo(o2.getValue()))
+                .map(Map.Entry::getKey).orElse(null);
+
+        return MostReservedDay;
     }
 
 }

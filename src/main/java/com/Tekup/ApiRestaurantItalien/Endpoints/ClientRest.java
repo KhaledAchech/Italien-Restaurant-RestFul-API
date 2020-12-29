@@ -90,4 +90,16 @@ public class ClientRest {
         return new ResponseEntity<String>(errors.toString(), HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/mostLoyalClient")
+    public ClientResponse MostLoyalClient()
+    {
+        return clientService.getMostLoyalClient();
+    }
+
+    @GetMapping("/mostReservedDay")
+    public String getMostReservedDayByClient(@RequestBody Client client)
+    {
+        return clientService.getMostReservedDayByClient(client);
+    }
+
 }

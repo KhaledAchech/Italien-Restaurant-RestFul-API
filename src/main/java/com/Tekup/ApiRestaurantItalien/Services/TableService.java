@@ -20,4 +20,7 @@ public interface TableService {
     TableResponse deleteTableById(int numero);
 
     Table addTicket(int numero, Ticket ticket);
+
+    //Most reserved table (la table la plus réservée)
+    TableResponse getMostReservedTable();
 }

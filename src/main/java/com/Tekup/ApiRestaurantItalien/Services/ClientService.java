@@ -21,4 +21,10 @@ public interface ClientService {
     Client addTicket(long id, Ticket ticket);
 
     ClientResponse getClientInfosById(long id);
+
+    // get most loyal client (le client le plus fidèle au restaurant)
+    ClientResponse getMostLoyalClient();
+
+    String getMostReservedDayByClient(Client client);
+
 }

@@ -23,4 +23,7 @@ public class MetRequest {
     private String nom;
     @Positive(message = "This field should be positive")
     private float prix;
+    @NotBlank(message = "type must not be empty")
+    @Pattern(regexp = "[a-zA-Z ]+", message =  "Name must contain only characters")
+    private String type;
 }
